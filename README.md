@@ -1,7 +1,7 @@
 # Image Metadata Challenge
 
 ## Basic Idea and Topic
-This CTF challenge involves an ordinary-looking image with a secret flag hidden in its metadata. The flag is encrypted within the EXIF `UserComment` field, and the decryption key is embedded in the `Copyright` field. Participants must extract the metadata, identify the encrypted flag, and decrypt it using the Vigenère cipher to reveal `flag{metadata_secrets}`. The challenge tests metadata analysis, steganography awareness, and basic cryptographic skills.
+This CTF challenge involves an ordinary-looking image with a secret flag hidden in its metadata. The flag is encrypted within the EXIF `UserComment` field, and the decryption key is embedded in the `Copyright` field. Participants must extract the metadata, identify the encrypted flag, and decrypt it using the Vigenère cipher to reveal `flag{i_am_groot!}`. The challenge tests metadata analysis, steganography awareness, and basic cryptographic skills.
 
 ## The Catch / Trap
 Participants might fall into the trap of analyzing the image's pixels for steganographic clues (e.g., hidden patterns or LSB encoding), overlooking the metadata entirely. The flag is not in the visible content but concealed in the metadata, requiring forensic tools like `exiftool` rather than image viewers or editors.
@@ -16,13 +16,13 @@ To solve the challenge:
    ```
    Output includes:
 
-   `UserComment: xpcx{qxvapeka_kiemu}
+   `UserComment: xpcx{m_to_gdsft!}
    Copyright: Copyright 2023 SecretCamera Inc.`
-3. **Identify the Encrypted Flag**: The `UserComment` field contains a strange string (`xpcx{qxvapeka_kiemu}`), suggesting it’s the encrypted flag.
+3. **Identify the Encrypted Flag**: The `UserComment` field contains a strange string (`xpcx{m_to_gdsft!}`), suggesting it’s the encrypted flag.
 4. **Find the Key**: In the `Copyright` field, notice `SecretCamera` within `Copyright 2023 SecretCamera Inc.`. This is an unusual term and likely the decryption key.
 5. **Determine the Encryption Method**: The encrypted text doesn’t resemble Base64 or simple ciphers like Caesar; its polyalphabetic nature hints at Vigenère cipher, especially given the key length and flag format.
 6. **Decrypt the Flag**: Use the Vigenère cipher with key SecretCamera (case-insensitive here, as the flag is lowercase):  
-  -*Ciphertext*: `xpcx{qxvapeka_kiemu}`  
+  -*Ciphertext*: `xpcx{m_to_gdsft!}`  
   -*Key*: `secretcamera` (repeated: `secretcamerasecretc` for 19 letters)  
   -*Decryption* (subtract key shifts, mod 26):
    
@@ -31,14 +31,14 @@ To solve the challenge:
       `c(2) - c(2) = 0 → a`  
       `x(23) - r(17) = 6 → g`  
       `{` unchanged  
-      `q(16) - e(4) = 12 → m`  
+      `m(13) - e(4) = 9 → i`  
       ... (continues similarly)
    
-     -*Result*: `flag{metadata_secrets}`  
+     -*Result*: `flag{i_am_groot!}`  
   
 8. **Verify**: The decrypted text matches the CTF flag format.
 
-**Flag**: `flag{metadata_secrets}`
+**Flag**: `flag{i_am_groot!}`
 
 **Tools Recommended**: `exiftool` for metadata extraction; any Vigenère cipher tool or script for decryption.
 
@@ -53,3 +53,42 @@ docker build -t image-metadata-challenge .
 docker run -p 80:80 image-metadata-challenge
 ```
 4. **Access**: Open `http://localhost` in a browser to see the challenge page and download the image.
+
+## Python Script for Encryption
+The following Python script can be used to encrypt the flag using the Vigenère cipher:
+
+```python
+def vigenere_encrypt(plaintext, key):
+    key = key.lower()
+    key_index = 0
+    ciphertext = ''
+    for char in plaintext:
+        if char.isalpha():
+            shift = ord(key[key_index]) - ord('a')
+            if char.isupper():
+                ciphertext += chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+            else:
+                ciphertext += chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
+            key_index = (key_index + 1) % len(key)
+        else:
+            ciphertext += char
+    return ciphertext
+
+if __name__ == "__main__":
+    flag = "flag{i_am_groot!}"
+    key = "SecretCamera"
+    encrypted_flag = vigenere_encrypt(flag, key)
+    print(f"Encrypted Flag: {encrypted_flag}")
+```
+
+### Example Output
+Running the script:
+```bash
+python encrypt.py
+```
+Output:
+```
+Encrypted Flag: xpcx{m_to_gdsft!}
+```
+
+This script demonstrates how the flag was encrypted.
