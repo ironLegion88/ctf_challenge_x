@@ -34,7 +34,7 @@ To solve the challenge:
       `q(16) - e(4) = 12 → m`  
       ... (continues similarly)
    
-  -*Result*: `flag{metadata_secrets}`  
+     -*Result*: `flag{metadata_secrets}`  
   
 8. **Verify**: The decrypted text matches the CTF flag format.
 
