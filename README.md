@@ -24,14 +24,16 @@ To solve the challenge:
 6. **Decrypt the Flag**: Use the Vigenère cipher with key SecretCamera (case-insensitive here, as the flag is lowercase):  
   -*Ciphertext*: `xpcx{qxvapeka_kiemu}`  
   -*Key*: `secretcamera` (repeated: `secretcamerasecretc` for 19 letters)  
-  -*Decryption* (subtract key shifts, mod 26):  
-     -`x(23) - s(18) = 5 → f`  
-     -`p(15) - e(4) = 11 → l`  
-     -`c(2) - c(2) = 0 → a`  
-     -`x(23) - r(17) = 6 → g`  
-     -`{` unchanged  
-     -`q(16) - e(4) = 12 → m`  
-     -... (continues similarly)
+  -*Decryption* (subtract key shifts, mod 26):
+   
+      `x(23) - s(18) = 5 → f`  
+      `p(15) - e(4) = 11 → l`  
+      `c(2) - c(2) = 0 → a`  
+      `x(23) - r(17) = 6 → g`  
+      `{` unchanged  
+      `q(16) - e(4) = 12 → m`  
+      ... (continues similarly)
+   
   -*Result*: `flag{metadata_secrets}`  
 8. **Verify**: The decrypted text matches the CTF flag format.
 
