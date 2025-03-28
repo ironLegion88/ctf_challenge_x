@@ -35,6 +35,7 @@ To solve the challenge:
       ... (continues similarly)
    
   -*Result*: `flag{metadata_secrets}`  
+  
 8. **Verify**: The decrypted text matches the CTF flag format.
 
 **Flag**: `flag{metadata_secrets}`
